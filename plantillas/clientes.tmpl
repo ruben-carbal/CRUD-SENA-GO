@@ -1,37 +1,27 @@
 {{define "clientes"}}
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto</title>
-</head>
-
-<body>
-    <table>
-        <thead>
-            <tr>
-                <th>id_cliente</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Juan</td>
-                <td>hola@yo.com</td>
-                <td>32382398</td>
-                <td>Calle 5</td>
-                <td>Editar | Borrar</td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-
-</html>
+{{template "header"}}
+<a href="/agregar-cliente">Agregar Nuevo Cliente</a>
+            <table>
+                <thead>
+                    <tr>
+                        <th>id_cliente</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Dirección</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan</td>
+                        <td>hola@yo.com</td>
+                        <td>32382398</td>
+                        <td>Calle 5</td>
+                        <td>Editar | Borrar</td>
+                    </tr>
+                </tbody>
+            </table>
+{{template "footer"}}
 {{end}}
