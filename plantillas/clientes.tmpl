@@ -13,14 +13,16 @@
         </tr>
     </thead>
     <tbody>
+        {{range.}}
         <tr>
-            <td>1</td>
-            <td>Juan</td>
-            <td>hola@yo.com</td>
-            <td>32382398</td>
-            <td>Calle 5</td>
-            <td>Editar | Borrar</td>
+            <td>{{.Id}}</td>
+            <td>{{.Nombre}}</td>
+            <td>{{.Correo}}</td>
+            <td>{{.Telefono}}</td>
+            <td>{{.Direccion}}</td>
+            <td>Editar {{.Id}} | Borrar {{.Id}}</td>
         </tr>
+        {{end}}Calle
     </tbody>
 </table>
 {{template "footer"}}
