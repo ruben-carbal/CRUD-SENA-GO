@@ -30,6 +30,7 @@ func main() {
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/agregar-cliente", AgregarCliente)
 	http.HandleFunc("/clientes", Clientes)
+	http.HandleFunc("/borrar-cliente", BorrarCliente)
 
 	log.Println("Server Running...")
 	http.ListenAndServe(":8080", nil)
@@ -73,8 +74,6 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		arrayCliente = append(arrayCliente, cliente)
 	}
 
-	log.Println("clientes: ", arrayCliente)
-
 	plantillas.ExecuteTemplate(w, "clientes", arrayCliente)
 }
 
@@ -99,4 +98,19 @@ func Clientes(w http.ResponseWriter, r *http.Request) {
 		insertar.Exec(nombre, correo, telefono, direccion)
 		http.Redirect(w, r, "/", 301)
 	}
+}
+
+func BorrarCliente(w http.ResponseWriter, r *http.Request) {
+	idCliente := r.URL.Query().Get("id")
+
+	conexion := conexionDB()
+	borrar, err := conexion.Prepare("DELETE FROM clientes WHERE id=?")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	borrar.Exec(idCliente)
+	http.Redirect(w, r, "/", 301)
+
 }

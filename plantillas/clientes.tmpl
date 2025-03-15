@@ -20,7 +20,9 @@
             <td>{{.Correo}}</td>
             <td>{{.Telefono}}</td>
             <td>{{.Direccion}}</td>
-            <td>Editar {{.Id}} | Borrar {{.Id}}</td>
+            <td>Editar {{.Id}} |
+                <button><a href="/borrar-cliente?id={{.Id}}">Borrar</a></button>
+            </td>
         </tr>
         {{end}}Calle
     </tbody>
