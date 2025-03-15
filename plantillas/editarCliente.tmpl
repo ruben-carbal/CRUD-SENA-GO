@@ -1,0 +1,20 @@
+{{define "editarCliente"}}
+{{template "header"}}
+<div class="card">
+    <form method="post" action="/actualizar-cliente">
+        <div>
+            <input type="hidden" id="id" name="id" value={{.Id}} />
+        </div>
+        <label for="name">Nombre: </label>
+        <input id="name" name="name" value={{.Nombre}} />
+        <label for="correo">Correo: </label>
+        <input id="correo" name="correo" type="email" value={{.Correo}} />
+        <label for="telefono">Teléfono: </label>
+        <input id="telefono" name="telefono" type="tel" value={{.Telefono}} />
+        <label for="direccion">Dirección: </label>
+        <input id="direccion" name="direccion" value={{.Direccion}} />
+        <button type="submit">Modificar Cliente</button>
+    </form>
+</div>
+{{template "footer"}}
+{{end}}

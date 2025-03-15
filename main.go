@@ -31,6 +31,8 @@ func main() {
 	http.HandleFunc("/agregar-cliente", AgregarCliente)
 	http.HandleFunc("/clientes", Clientes)
 	http.HandleFunc("/borrar-cliente", BorrarCliente)
+	http.HandleFunc("/editar-cliente", EditarCliente)
+	http.HandleFunc("/actualizar-cliente", ActualizarCliente)
 
 	log.Println("Server Running...")
 	http.ListenAndServe(":8080", nil)
@@ -113,4 +115,51 @@ func BorrarCliente(w http.ResponseWriter, r *http.Request) {
 	borrar.Exec(idCliente)
 	http.Redirect(w, r, "/", 301)
 
+}
+
+func EditarCliente(w http.ResponseWriter, r *http.Request) {
+	idCliente := r.URL.Query().Get("id")
+
+	conexion := conexionDB()
+	registro, err := conexion.Query("SELECT * FROM clientes WHERE id=?", idCliente)
+
+	cliente := Cliente{}
+
+	for registro.Next() {
+		var id int
+		var nombre, correo, telefono, direccion string
+		err = registro.Scan(&id, &nombre, &correo, &telefono, &direccion)
+
+		if err != nil {
+			panic(err.Error())
+		}
+
+		cliente.Id = id
+		cliente.Nombre = nombre
+		cliente.Correo = correo
+		cliente.Telefono = telefono
+		cliente.Direccion = direccion
+	}
+
+	plantillas.ExecuteTemplate(w, "editarCliente", cliente)
+}
+
+func ActualizarCliente(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		id := r.FormValue("id")
+		nombre := r.FormValue("name")
+		correo := r.FormValue("correo")
+		telefono := r.FormValue("telefono")
+		direccion := r.FormValue("direccion")
+
+		conexion := conexionDB()
+		modificar, err := conexion.Prepare("UPDATE clientes SET nombre=?, correo=?, telefono=?, direccion=? WHERE id=?")
+
+		if err != nil {
+			panic(err.Error())
+		}
+
+		modificar.Exec(nombre, correo, telefono, direccion, id)
+		http.Redirect(w, r, "/", 301)
+	}
 }
