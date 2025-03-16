@@ -71,64 +71,66 @@ func Productos(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//func BorrarProducto(w http.ResponseWriter, r *http.Request) {
-//	idproducto := r.URL.Query().Get("id")
-//
-//	conexion := db.ConexionDB()
-//	borrar, err := conexion.Prepare("DELETE FROM productos WHERE id=?")
-//
-//	if err != nil {
-//		panic(err.Error())
-//	}
-//
-//	borrar.Exec(idproducto)
-//	http.Redirect(w, r, "/", 301)
-//
-//}
-//
-//func EditarProducto(w http.ResponseWriter, r *http.Request) {
-//	idproducto := r.URL.Query().Get("id")
-//
-//	conexion := db.ConexionDB()
-//	registro, err := conexion.Query("SELECT * FROM productos WHERE id=?", idCliente)
-//
-//	producto := Cliente{}
-//
-//	for registro.Next() {
-//		var id int
-//		var nombre, correo, telefono, direccion string
-//		err = registro.Scan(&id, &nombre, &correo, &telefono, &direccion)
-//
-//		if err != nil {
-//			panic(err.Error())
-//		}
-//
-//		producto.Id = id
-//		producto.Nombre = nombre
-//		producto.Correo = correo
-//		producto.Telefono = telefono
-//		producto.Direccion = direccion
-//	}
-//
-//	plantillas.ExecuteTemplate(w, "editarproducto", cliente)
-//}
-//
-//func ActualizarProducto(w http.ResponseWriter, r *http.Request) {
-//	if r.Method == "POST" {
-//		id := r.FormValue("id")
-//		nombre := r.FormValue("name")
-//		correo := r.FormValue("correo")
-//		telefono := r.FormValue("telefono")
-//		direccion := r.FormValue("direccion")
-//
-//		conexion := db.ConexionDB()
-//		modificar, err := conexion.Prepare("UPDATE productos SET nombre=?, correo=?, telefono=?, direccion=? WHERE id=?")
-//
-//		if err != nil {
-//			panic(err.Error())
-//		}
-//
-//		modificar.Exec(nombre, correo, telefono, direccion, id)
-//		http.Redirect(w, r, "/", 301)
-//	}
-//}
+func BorrarProducto(w http.ResponseWriter, r *http.Request) {
+	idProducto := r.URL.Query().Get("codigo")
+
+	conexion := db.ConexionDB()
+	borrar, err := conexion.Prepare("DELETE FROM productos WHERE codigo=?")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	borrar.Exec(idProducto)
+	http.Redirect(w, r, "/lista-productos", 301)
+
+}
+
+func EditarProducto(w http.ResponseWriter, r *http.Request) {
+	idProducto := r.URL.Query().Get("codigo")
+
+	conexion := db.ConexionDB()
+	registro, err := conexion.Query("SELECT * FROM productos WHERE codigo=?", idProducto)
+
+	producto := Producto{}
+
+	for registro.Next() {
+		var codigo, stock int
+		var nombre, categoria string
+		var precio float64
+
+		err = registro.Scan(&codigo, &nombre, &categoria, &precio, &stock)
+
+		if err != nil {
+			panic(err.Error())
+		}
+
+		producto.IdProd = codigo
+		producto.NombreProd = nombre
+		producto.Categoria = categoria
+		producto.Precio = fmt.Sprintf("%.2f", precio)
+		producto.Stock = stock
+	}
+
+	plantillas.ExecuteTemplate(w, "editarProducto", producto)
+}
+
+func ActualizarProducto(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		codigo := r.FormValue("codigo")
+		nombre := r.FormValue("nombre")
+		categoria := r.FormValue("categoria")
+		precio := r.FormValue("precio")
+		stock := r.FormValue("stock")
+
+		conexion := db.ConexionDB()
+		modificar, err := conexion.Prepare("UPDATE productos SET nombre=?, categoria=?, precio=?, stock=? WHERE codigo=?")
+
+		if err != nil {
+			panic(err.Error())
+		}
+
+		modificar.Exec(nombre, categoria, precio, stock, codigo)
+		http.Redirect(w, r, "/lista-productos", 301)
+	}
+}

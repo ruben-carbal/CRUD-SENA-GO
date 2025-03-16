@@ -22,6 +22,9 @@ func main() {
 	http.HandleFunc("/lista-productos", handlers.ProductHome)
 	http.HandleFunc("/agregar-producto", handlers.AgregarProducto)
 	http.HandleFunc("/productos", handlers.Productos)
+	http.HandleFunc("/borrar-producto", handlers.BorrarProducto)
+	http.HandleFunc("/editar-producto", handlers.EditarProducto)
+	http.HandleFunc("/actualizar-producto", handlers.ActualizarProducto)
 
 	log.Println("Server Running...")
 	http.ListenAndServe(":8080", nil)
