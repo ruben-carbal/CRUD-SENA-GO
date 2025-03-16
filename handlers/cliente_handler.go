@@ -16,7 +16,7 @@ type Cliente struct {
 	Direccion string
 }
 
-func Home(w http.ResponseWriter, r *http.Request) {
+func ClienteHome(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprint(w, "Hola")
 	conexion := db.ConexionDB()
 	registros, err := conexion.Query("SELECT * FROM clientes")
@@ -68,7 +68,7 @@ func Clientes(w http.ResponseWriter, r *http.Request) {
 		}
 
 		insertar.Exec(nombre, correo, telefono, direccion)
-		http.Redirect(w, r, "/", 301)
+		http.Redirect(w, r, "/lista-clientes", 301)
 	}
 }
 
@@ -83,8 +83,7 @@ func BorrarCliente(w http.ResponseWriter, r *http.Request) {
 	}
 
 	borrar.Exec(idCliente)
-	http.Redirect(w, r, "/", 301)
-
+	http.Redirect(w, r, "/lista-clientes", 301)
 }
 
 func EditarCliente(w http.ResponseWriter, r *http.Request) {
@@ -130,6 +129,6 @@ func ActualizarCliente(w http.ResponseWriter, r *http.Request) {
 		}
 
 		modificar.Exec(nombre, correo, telefono, direccion, id)
-		http.Redirect(w, r, "/", 301)
+		http.Redirect(w, r, "/lista-clientes", 301)
 	}
 }

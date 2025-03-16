@@ -13,6 +13,10 @@ var plantillas = template.Must(template.ParseGlob("plantillas/*"))
 
 func main() {
 	http.HandleFunc("/", handlers.Home)
+	http.HandleFunc("/form-registro", handlers.FormRegistro)
+	http.HandleFunc("/registro", handlers.Register)
+
+	http.HandleFunc("/lista-clientes", handlers.ClienteHome)
 	http.HandleFunc("/agregar-cliente", handlers.AgregarCliente)
 	http.HandleFunc("/clientes", handlers.Clientes)
 	http.HandleFunc("/borrar-cliente", handlers.BorrarCliente)
