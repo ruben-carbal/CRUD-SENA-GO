@@ -1,28 +1,28 @@
-{{define "clientes"}}
+{{define "productos"}}
 {{template "header"}}
-<button><a href="/agregar-cliente">Agregar Nuevo Cliente</a></button>
+<button><a href="/agregar-producto">Agregar Nuevo Producto</a></button>
 <table>
     <thead>
         <tr>
-            <th>id_cliente</th>
+            <th>Código</th>
             <th>Nombre</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
-            <th>Dirección</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         {{range.}}
         <tr>
-            <td>{{.Id}}</td>
-            <td>{{.Nombre}}</td>
-            <td>{{.Correo}}</td>
-            <td>{{.Telefono}}</td>
-            <td>{{.Direccion}}</td>
+            <td>{{.IdProd}}</td>
+            <td>{{.NombreProd}}</td>
+            <td>{{.Categoria}}</td>
+            <td>{{.Precio}}</td>
+            <td>{{.Stock}}</td>
             <td>
-                <button><a href="/editar-cliente?id={{.Id}}">Editar</a></button> |
-                <button><a href="/borrar-cliente?id={{.Id}}">Borrar</a></button>
+                <button><a href="/editar-producto?id={{.Id}}">Editar</a></button> |
+                <button><a href="/borrar-producto?id={{.Id}}">Borrar</a></button>
             </td>
         </tr>
         {{end}}

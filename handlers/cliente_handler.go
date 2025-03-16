@@ -16,6 +16,39 @@ type Cliente struct {
 	Direccion string
 }
 
+func Home(w http.ResponseWriter, r *http.Request) {
+	// fmt.Fprint(w, "Hola")
+	conexion := db.ConexionDB()
+	registros, err := conexion.Query("SELECT * FROM clientes")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	cliente := Cliente{}
+	arrayCliente := []Cliente{}
+
+	for registros.Next() {
+		var id int
+		var nombre, correo, telefono, direccion string
+
+		err = registros.Scan(&id, &nombre, &correo, &telefono, &direccion)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		cliente.Id = id
+		cliente.Nombre = nombre
+		cliente.Correo = correo
+		cliente.Telefono = telefono
+		cliente.Direccion = direccion
+
+		arrayCliente = append(arrayCliente, cliente)
+	}
+
+	plantillas.ExecuteTemplate(w, "clientes", arrayCliente)
+}
+
 func AgregarCliente(w http.ResponseWriter, r *http.Request) {
 	plantillas.ExecuteTemplate(w, "agregarCliente", nil)
 }
