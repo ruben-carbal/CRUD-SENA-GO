@@ -1,22 +1,32 @@
-!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto</title>
-</head>
-
-<body>
-    <table>
-        <thead>
+{{define "clientes"}}
+{{template "header"}}
+<button><a href="/agregar-cliente">Agregar Nuevo Cliente</a></button>
+<table>
+    <thead>
+        <tr>
             <th>id_cliente</th>
             <th>Nombre</th>
             <th>Correo</th>
             <th>Teléfono</th>
             <th>Dirección</th>
-        </thead>
-    </table>
-</body>
-
-</html>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range.}}
+        <tr>
+            <td>{{.Id}}</td>
+            <td>{{.Nombre}}</td>
+            <td>{{.Correo}}</td>
+            <td>{{.Telefono}}</td>
+            <td>{{.Direccion}}</td>
+            <td>
+                <button><a href="/editar-cliente?id={{.Id}}">Editar</a></button> |
+                <button><a href="/borrar-cliente?id={{.Id}}">Borrar</a></button>
+            </td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+{{template "footer"}}
+{{end}}

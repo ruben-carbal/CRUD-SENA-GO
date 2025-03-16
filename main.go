@@ -2,37 +2,23 @@ package main
 
 import (
 	//"fmt"
-	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"net/http"
+	"sena-crud/db"
+	"sena-crud/handlers"
 	"text/template"
 )
-
-func conexionDB() (conexion *sql.DB) {
-	Driver := "mysql"
-	Usuario := "root"
-	Contraseña := ""
-	Nombre := "datos"
-
-	db, err := sql.Open(Driver, Usuario+":"+Contraseña+"@tcp(127.0.0.1)/"+Nombre)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return db
-}
 
 var plantillas = template.Must(template.ParseGlob("plantillas/*"))
 
 func main() {
 	http.HandleFunc("/", Home)
-	http.HandleFunc("/agregar-cliente", AgregarCliente)
-	http.HandleFunc("/clientes", Clientes)
-	http.HandleFunc("/borrar-cliente", BorrarCliente)
-	http.HandleFunc("/editar-cliente", EditarCliente)
-	http.HandleFunc("/actualizar-cliente", ActualizarCliente)
+	http.HandleFunc("/agregar-cliente", handlers.AgregarCliente)
+	http.HandleFunc("/clientes", handlers.Clientes)
+	http.HandleFunc("/borrar-cliente", handlers.BorrarCliente)
+	http.HandleFunc("/editar-cliente", handlers.EditarCliente)
+	http.HandleFunc("/actualizar-cliente", handlers.ActualizarCliente)
 
 	log.Println("Server Running...")
 	http.ListenAndServe(":8080", nil)
@@ -48,7 +34,7 @@ type Cliente struct {
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprint(w, "Hola")
-	conexion := conexionDB()
+	conexion := db.ConexionDB()
 	registros, err := conexion.Query("SELECT * FROM clientes")
 
 	if err != nil {
@@ -77,89 +63,4 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	plantillas.ExecuteTemplate(w, "clientes", arrayCliente)
-}
-
-func AgregarCliente(w http.ResponseWriter, r *http.Request) {
-	plantillas.ExecuteTemplate(w, "agregarCliente", nil)
-}
-
-func Clientes(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		nombre := r.FormValue("name")
-		correo := r.FormValue("correo")
-		telefono := r.FormValue("telefono")
-		direccion := r.FormValue("direccion")
-
-		conexion := conexionDB()
-		insertar, err := conexion.Prepare("INSERT INTO clientes(nombre, correo, telefono, direccion) VALUES(?, ?, ?, ?)")
-
-		if err != nil {
-			panic(err.Error())
-		}
-
-		insertar.Exec(nombre, correo, telefono, direccion)
-		http.Redirect(w, r, "/", 301)
-	}
-}
-
-func BorrarCliente(w http.ResponseWriter, r *http.Request) {
-	idCliente := r.URL.Query().Get("id")
-
-	conexion := conexionDB()
-	borrar, err := conexion.Prepare("DELETE FROM clientes WHERE id=?")
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	borrar.Exec(idCliente)
-	http.Redirect(w, r, "/", 301)
-
-}
-
-func EditarCliente(w http.ResponseWriter, r *http.Request) {
-	idCliente := r.URL.Query().Get("id")
-
-	conexion := conexionDB()
-	registro, err := conexion.Query("SELECT * FROM clientes WHERE id=?", idCliente)
-
-	cliente := Cliente{}
-
-	for registro.Next() {
-		var id int
-		var nombre, correo, telefono, direccion string
-		err = registro.Scan(&id, &nombre, &correo, &telefono, &direccion)
-
-		if err != nil {
-			panic(err.Error())
-		}
-
-		cliente.Id = id
-		cliente.Nombre = nombre
-		cliente.Correo = correo
-		cliente.Telefono = telefono
-		cliente.Direccion = direccion
-	}
-
-	plantillas.ExecuteTemplate(w, "editarCliente", cliente)
-}
-
-func ActualizarCliente(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		id := r.FormValue("id")
-		nombre := r.FormValue("name")
-		correo := r.FormValue("correo")
-		telefono := r.FormValue("telefono")
-		direccion := r.FormValue("direccion")
-
-		conexion := conexionDB()
-		modificar, err := conexion.Prepare("UPDATE clientes SET nombre=?, correo=?, telefono=?, direccion=? WHERE id=?")
-
-		if err != nil {
-			panic(err.Error())
-		}
-
-		modificar.Exec(nombre, correo, telefono, direccion, id)
-		http.Redirect(w, r, "/", 301)
-	}
 }

@@ -1,4 +1,4 @@
-module intentoSena
+module sena-crud
 
 go 1.24.0
 
