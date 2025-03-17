@@ -12,6 +12,8 @@ import (
 var plantillas = template.Must(template.ParseGlob("plantillas/*"))
 
 func main() {
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/form-registro", handlers.FormRegistro)
 	http.HandleFunc("/registro", handlers.Register)
