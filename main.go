@@ -15,7 +15,7 @@ func main() {
 	http.HandleFunc("/", handlers.Home)
 	http.HandleFunc("/form-registro", handlers.FormRegistro)
 	http.HandleFunc("/registro", handlers.Register)
-	//http.HandleFunc("/login", handlers.LoginFunc)
+	http.HandleFunc("/login", handlers.LoginFunc)
 
 	http.HandleFunc("/lista-clientes", handlers.ClienteHome)
 	http.HandleFunc("/agregar-cliente", handlers.AgregarCliente)
