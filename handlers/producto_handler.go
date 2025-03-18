@@ -59,6 +59,11 @@ func Productos(w http.ResponseWriter, r *http.Request) {
 		precio := r.FormValue("precio")
 		stock := r.FormValue("stock")
 
+		if len(nombre) == 0 || len(categoria) == 0 || len(precio) == 0 || len(stock) == 0 {
+			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			return
+		}
+
 		conexion := db.ConexionDB()
 		insertar, err := conexion.Prepare("INSERT INTO productos(nombre, categoria, precio, stock) VALUES(?, ?, ?, ?)")
 
@@ -122,6 +127,11 @@ func ActualizarProducto(w http.ResponseWriter, r *http.Request) {
 		categoria := r.FormValue("categoria")
 		precio := r.FormValue("precio")
 		stock := r.FormValue("stock")
+
+		if len(nombre) == 0 || len(categoria) == 0 || len(precio) == 0 || len(stock) == 0 {
+			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			return
+		}
 
 		conexion := db.ConexionDB()
 		modificar, err := conexion.Prepare("UPDATE productos SET nombre=?, categoria=?, precio=?, stock=? WHERE codigo=?")

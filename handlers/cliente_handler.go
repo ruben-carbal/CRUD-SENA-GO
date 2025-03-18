@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"sena-crud/db"
 	"text/template"
@@ -59,6 +60,11 @@ func Clientes(w http.ResponseWriter, r *http.Request) {
 		correo := r.FormValue("correo")
 		telefono := r.FormValue("telefono")
 		direccion := r.FormValue("direccion")
+
+		if len(nombre) == 0 || len(correo) == 0 || len(telefono) == 0 || len(direccion) == 0 {
+			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			return
+		}
 
 		conexion := db.ConexionDB()
 		insertar, err := conexion.Prepare("INSERT INTO clientes(nombre, correo, telefono, direccion) VALUES(?, ?, ?, ?)")
@@ -120,6 +126,11 @@ func ActualizarCliente(w http.ResponseWriter, r *http.Request) {
 		correo := r.FormValue("correo")
 		telefono := r.FormValue("telefono")
 		direccion := r.FormValue("direccion")
+
+		if len(nombre) == 0 || len(correo) == 0 || len(telefono) == 0 || len(direccion) == 0 {
+			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			return
+		}
 
 		conexion := db.ConexionDB()
 		modificar, err := conexion.Prepare("UPDATE clientes SET nombre=?, correo=?, telefono=?, direccion=? WHERE id=?")

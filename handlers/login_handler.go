@@ -61,6 +61,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
+		if len(username) < 4 {
+			er := http.StatusNotAcceptable
+			http.Error(w, "Tu usuario debe tener al menos 4 caracteres", er)
+			return
+		}
+
 		if len(password) < 4 {
 			er := http.StatusNotAcceptable
 			http.Error(w, "Tu contraseña es muy corta", er)
