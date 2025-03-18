@@ -62,7 +62,7 @@ func Clientes(w http.ResponseWriter, r *http.Request) {
 		direccion := r.FormValue("direccion")
 
 		if len(nombre) == 0 || len(correo) == 0 || len(telefono) == 0 || len(direccion) == 0 {
-			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			fmt.Fprintf(w, `<script>alert("Los campos no pueden estar vacíos"); window.location.href='/agregar-cliente';</script>`)
 			return
 		}
 
@@ -128,7 +128,7 @@ func ActualizarCliente(w http.ResponseWriter, r *http.Request) {
 		direccion := r.FormValue("direccion")
 
 		if len(nombre) == 0 || len(correo) == 0 || len(telefono) == 0 || len(direccion) == 0 {
-			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			fmt.Fprintf(w, `<script>alert("Los campos no pueden estar vacíos"); window.location.href='/editar-cliente?id=%s';</script>`, id)
 			return
 		}
 

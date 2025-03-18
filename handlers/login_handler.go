@@ -62,14 +62,16 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		password := r.FormValue("password")
 
 		if len(username) < 4 {
-			er := http.StatusNotAcceptable
-			http.Error(w, "Tu usuario debe tener al menos 4 caracteres", er)
+			//er := http.StatusNotAcceptable
+			//http.Error(w, "Tu usuario debe tener al menos 4 caracteres", er)
+			fmt.Fprintf(w, `<script>alert("Tu nombre de usuario debe tener al menos 4 caracteres"); window.location.href='/form-registro';</script>`)
 			return
 		}
 
 		if len(password) < 4 {
-			er := http.StatusNotAcceptable
-			http.Error(w, "Tu contraseña es muy corta", er)
+			//er := http.StatusNotAcceptable
+			//http.Error(w, "Tu contraseña es muy corta", er)
+			fmt.Fprintf(w, `<script>alert("Tu contraseña es muy corta"); window.location.href='/form-registro';</script>`)
 			return
 		}
 
@@ -82,7 +84,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if count > 0 {
-			fmt.Fprintf(w, "El usuario ya existe")
+			fmt.Fprintf(w, `<script>alert("El usuario ya existe"); window.location.href='/form-registro';</script>`)
 			return
 		}
 
@@ -114,7 +116,7 @@ func LoginFunc(w http.ResponseWriter, r *http.Request) {
 		err := conexion.QueryRow("SELECT idUser, username, contraseña FROM usuarios WHERE username=?", username).Scan(&user.IdUser, &user.Username, &user.Password)
 
 		if err != nil || password != user.Password {
-			fmt.Fprintf(w, "Usuario o contraseña incorrectos")
+			fmt.Fprintf(w, `<script>alert("Usuario o contraseña incorrectos"); window.location.href='/';</script>`)
 			return
 		}
 

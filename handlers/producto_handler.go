@@ -60,7 +60,7 @@ func Productos(w http.ResponseWriter, r *http.Request) {
 		stock := r.FormValue("stock")
 
 		if len(nombre) == 0 || len(categoria) == 0 || len(precio) == 0 || len(stock) == 0 {
-			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			fmt.Fprintf(w, `<script>alert("Los campos no pueden estar vacíos"); window.location.href='/agregar-producto';</script>`)
 			return
 		}
 
@@ -129,7 +129,7 @@ func ActualizarProducto(w http.ResponseWriter, r *http.Request) {
 		stock := r.FormValue("stock")
 
 		if len(nombre) == 0 || len(categoria) == 0 || len(precio) == 0 || len(stock) == 0 {
-			fmt.Fprintf(w, "Los campos no pueden estar vacíos")
+			fmt.Fprintf(w, `<script>alert("Los campos no pueden estar vacíos"); window.location.href='/editar-producto?codigo=%s';</script>`, codigo)
 			return
 		}
 
